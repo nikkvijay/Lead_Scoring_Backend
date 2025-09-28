@@ -3,8 +3,17 @@
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.112.0+-green.svg)](https://fastapi.tiangolo.com)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-brightgreen)](https://lead-scoring-backend-b0hv.onrender.com)
 
 > AI-powered lead scoring system that combines rule-based logic with artificial intelligence to qualify sales prospects and predict buying intent.
+
+## 🌐 Live Demo
+
+**API Base URL:** https://lead-scoring-backend-b0hv.onrender.com
+
+**Interactive Documentation:** https://lead-scoring-backend-b0hv.onrender.com/docs
+
+**Health Check:** https://lead-scoring-backend-b0hv.onrender.com/health
 
 ## 🚀 Features
 
@@ -68,6 +77,18 @@
 
 ### 1. Store Offer
 
+**Live Demo:**
+```bash
+curl -X POST "https://lead-scoring-backend-b0hv.onrender.com/api/v1/offer" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "AI Outreach Automation",
+    "value_props": ["24/7 automated outreach", "6x more meetings"],
+    "ideal_use_cases": ["B2B SaaS companies", "Mid-market technology"]
+  }'
+```
+
+**Local Development:**
 ```bash
 curl -X POST "http://localhost:8000/api/v1/offer" \
   -H "Content-Type: application/json" \
@@ -86,18 +107,36 @@ name,role,company,industry,location,linkedin_bio
 Ava Patel,Head of Growth,FlowMetrics,software,San Francisco,Leading growth at B2B SaaS startup
 ```
 
+**Live Demo:**
+```bash
+curl -X POST "https://lead-scoring-backend-b0hv.onrender.com/api/v1/leads/upload" -F "file=@leads.csv"
+```
+
+**Local Development:**
 ```bash
 curl -X POST "http://localhost:8000/api/v1/leads/upload" -F "file=@leads.csv"
 ```
 
 ### 3. Execute Scoring
 
+**Live Demo:**
+```bash
+curl -X POST "https://lead-scoring-backend-b0hv.onrender.com/api/v1/score"
+```
+
+**Local Development:**
 ```bash
 curl -X POST "http://localhost:8000/api/v1/score"
 ```
 
 ### 4. Get Results
 
+**Live Demo:**
+```bash
+curl "https://lead-scoring-backend-b0hv.onrender.com/api/v1/results"
+```
+
+**Local Development:**
 ```bash
 curl "http://localhost:8000/api/v1/results"
 ```
