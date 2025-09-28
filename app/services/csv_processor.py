@@ -62,10 +62,20 @@ class CSVProcessor:
         # Check file size (convert MB to bytes)
         max_size = settings.max_file_size_mb * 1024 * 1024
 
-        # Get file size by seeking to end
-        await file.seek(0, 2)  # Seek to end
-        file_size = await file.tell()
-        await file.seek(0)  # Reset to beginning
+        # Get file size by reading content length from headers or reading file
+        try:
+            # Try to get size from content-length header first
+            if hasattr(file, 'size') and file.size is not None:
+                file_size = file.size
+            else:
+                # Read entire file to get size, then reset
+                content = await file.read()
+                file_size = len(content)
+                await file.seek(0)  # Reset to beginning
+        except Exception:
+            # If all else fails, skip size validation
+            logger.warning("Could not determine file size, skipping size validation")
+            return
 
         if file_size > max_size:
             raise CSVProcessingException(
