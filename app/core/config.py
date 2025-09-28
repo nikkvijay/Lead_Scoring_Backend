@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     ai_timeout: int = 15  # Shorter timeout for faster fallback
 
     # AI Model Configuration
-    gemini_model: str = "gemini-1.5-flash"  # Free tier model
+    gemini_model: str = "gemini-2.5-flash"  # Free tier model
     openai_model: str = "gpt-4o-mini"       # Cheaper OpenAI model
 
     # Business Logic
