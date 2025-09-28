@@ -152,11 +152,57 @@ pytest --cov=app --cov-report=html
 
 ## 🚀 Deployment
 
-### Deploy to Render (Recommended)
+### 🐳 Docker Deployment (Recommended)
 
+#### Quick Start with Docker Compose
+```bash
+# 1. Clone repository
+git clone https://github.com/nikkvijay/Lead_Scoring_Backend
+cd Lead_Scoring_Backend
+
+# 2. Set environment variables
+cp .env.example .env
+# Edit .env with your API keys
+
+# 3. Run with Docker Compose
+docker-compose up -d
+
+# 4. View logs
+docker-compose logs -f
+
+# 5. Stop containers
+docker-compose down
+```
+
+#### Manual Docker Build
+```bash
+# Build image
+docker build -t lead-scoring-backend .
+
+# Run container
+docker run -d \
+  --name lead-scoring-api \
+  -p 8000:8000 \
+  -e GEMINI_API_KEY=your_key_here \
+  -e OPENAI_API_KEY=your_key_here \
+  lead-scoring-backend
+
+# View logs
+docker logs -f lead-scoring-api
+```
+
+#### Production with Nginx (Optional)
+```bash
+# Run with nginx reverse proxy
+docker-compose --profile production up -d
+```
+
+### 🌐 Cloud Deployment
+
+#### Deploy to Render
 1. **Setup Repository**
    - Connect GitHub repository to Render
-   - Set environment variables in dashboard:
+   - Set environment variables:
      - `GEMINI_API_KEY`
      - `OPENAI_API_KEY` (optional)
 
@@ -169,19 +215,7 @@ pytest --cov=app --cov-report=html
    source venv/bin/activate && gunicorn app.main:app -w 1 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
    ```
 
-### Alternative Deployment Options
-
-#### Docker
-```dockerfile
-FROM python:3.11-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY . .
-CMD ["gunicorn", "app.main:app", "-w", "1", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000"]
-```
-
-#### Railway
+#### Deploy to Railway
 ```bash
 # Build Command:
 python -m venv venv && source venv/bin/activate && pip install -r requirements.txt
@@ -189,6 +223,12 @@ python -m venv venv && source venv/bin/activate && pip install -r requirements.t
 # Start Command:
 source venv/bin/activate && python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
 ```
+
+#### Deploy to AWS/GCP/Azure
+Use the provided `Dockerfile` with your preferred container service:
+- AWS ECS/Fargate
+- Google Cloud Run
+- Azure Container Instances
 
 ## 📁 Project Structure
 

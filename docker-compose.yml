@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  lead-scoring-api:
+    build: .
+    container_name: lead-scoring-backend
+    ports:
+      - "8000:8000"
+    environment:
+      # Application Settings
+      - APP_NAME=Lead Scoring API
+      - ENVIRONMENT=production
+      - DEBUG=false
+
+      # AI Configuration - Override with your keys
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - AI_PRIMARY_PROVIDER=gemini
+      - AI_FALLBACK_ENABLED=true
+
+      # AI Model Configuration
+      - GEMINI_MODEL=gemini-1.5-flash
+      - OPENAI_MODEL=gpt-4o-mini
+
+      # Business Logic
+      - MAX_LEADS_PER_UPLOAD=1000
+      - MAX_FILE_SIZE_MB=10
+
+      # Logging
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Add nginx reverse proxy for production
+  nginx:
+    image: nginx:alpine
+    container_name: lead-scoring-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - lead-scoring-api
+    restart: unless-stopped
+    profiles:
+      - production
+
+networks:
+  default:
+    name: lead-scoring-network
